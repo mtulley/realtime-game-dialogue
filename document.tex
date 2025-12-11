@@ -1,0 +1,129 @@
+
+
+% -------- Formatting Stuff -------- % 
+
+
+\documentclass[10pt,twocolumn]{article}
+\usepackage{oxycomps}
+\newcommand{\fixme}[2][]{#2}
+\renewcommand{\fixme}[2][]{\textcolor{red}{#2}}
+\bibliography{references}
+\pdfinfo{/Title (Large Language Models for Video Game Dialogue: Dynamic Storytelling and Effects on Player Experience)/Author (Max Tulley)}
+\title{Large Language Models for Video Game Dialogue: Dynamic Storytelling and Effects on Player Experience}
+\author{Max Tulley}
+\affiliation{Occidental College}
+\email{tulley@oxy.edu}
+\begin{document}
+\maketitle
+
+
+% -------- Beginning of Paper Content -------- % 
+
+
+\begin{abstract}
+
+    This paper examines the use of large language models (LLM) in video game dialogue systems through the design and testing of a top-down role-playing game demo. Based on previous works and literature discussing this topic, this demo game is designed to create a coherent and engaging experience. LLM output is manually evaluated for quality, coherence, and information accuracy. The strategy for generation used in the demo is a system for context management. The goal of this paper is to determine the efficacy of using an LLM for real-time dialogue generation.
+    
+\end{abstract}
+
+\section{Introduction and Problem Statement}
+    
+    \par
+    Video game dialogue systems have followed broadly similar patterns for decades. As early as the 1980s, games such as Cosmic Soldier experimented with simple branching conversation mechanics that let players choose limited dialogue options. By the 1990s, as computer role-playing games evolved, titles like Fallout expanded these branching systems into more structured dialogue trees and helped popularize the modern CRPG conversation model \cite{barton2008dungeonsanddesktops}. Since then game developers have expanded the size and complexity of dialogue trees including more options for players to choose from, more possible outcomes, and more dialogue overall. For many years this system has been the standard and it seemed like the only viable option for CRPG dialogue. However, despite decades of use, traditional branching dialogue trees remain limited in expressiveness and scalability. Current systems cannot dynamically generate nuanced or context-sensitive conversations, resulting in repetitive player experiences. This paper investigates how LLMs can address these limitations and evaluates their potential impact on player engagement and narrative design.
+    
+\section{Technical Background}
+    
+    \par
+    Traditional video game dialogue is typically implemented through branching dialogue trees, where designers manually script every possible line and player choice. These systems are easy to control but scale poorly: as the number of branches increases, narrative complexity grows exponentially, making conversations repetitive and difficult to maintain. Because all responses must be authored in advance, dialogue trees struggle to adapt to unpredictable player behavior or provide nuanced, context-sensitive interactions.
+
+    Recent advances in LLMs offer an alternative approach. Transformer-based models such as GPT and LLaMA generate text by predicting tokens using self-attention, enabling them to produce coherent, flexible dialogue shaped by surrounding context. When paired with techniques like fine-tuning, prompt engineering, and efficient context management, LLMs can be guided to match a game’s narrative style and respond dynamically to player actions. However, they also introduce challenges, including computational cost, unpredictability, and the need for careful control to maintain narrative consistency. Understanding both traditional dialogue systems and modern language model architecture provides the foundation for evaluating LLMs as tools for interactive storytelling.
+
+    There are several ways to make LLMs perform better at specific tasks. The most basic is providing context. Context is information that the LLM is given inside the prompt which it draws on to generate its response. Context management is the most straightforward strategy to generating domain specific responses. Other strategies include fine-tuning and retrieval augmented generation (RAG), which were not used in the demo, but will be discussed in this paper. Fine-tuning is the process of training a pretrained model on a small, specific dataset in order to improve its output quality for a specific task often at the cost of general output quality \cite{howard2018universallanguagemodelfinetuning}. RAG is a context management system which employs vector databases to search for the most semantically relevant information and inputs the information into the prompt \cite{lewis2021retrievalaugmentedgenerationknowledgeintensivenlp}. These will be discussed in more detail in later sections. 
+
+\section{Prior Work}
+
+    \par
+    This section will review recent academic literature which relates to LLMs in video games. This literature review does not follow a systematic approach, however, the process will be described here. The articles discussed were found using the following search query in multiple online databases: "("Video games" OR "games") AND ("LLM" OR "Large Language Model")". The articles were then selected manually, and any articles that did not discuss real-time dialogue generation were disregarded. 
+
+    \subsection{Use Cases}
+
+        \par
+        This section will explain the common use cases for LLMs in video games discussed in the academic literature. These include real-time dialogue generation, narrative generation, and procedural game world generation.
+    
+        \subsubsection{Dialogue Generation}
+        
+            \par
+            This topic is the most relevant for this paper since this project will focus on creating dialogue with LLMs. There are two options for LLM generated dialogue. The LLM can generate dialogue during the game development process which would then be implemented into a fixed dialogue system. The other option is to use the LLM for real-time dialogue that is generated while the game is played. The second option is much more revolutionary than the first as it allows for a completely new way to control game dialogue. Because of this, most recent research in this field examines the real-time generation of LLM dialogue\cite{huang_generating_2024}\cite{akoury_framework_2023}\cite{csepregi_effect_nodate}\cite{cox_conversational_2024}.
+    
+        \subsubsection{Narrative Generation}
+            
+            \par
+            Narrative generation in video games using large language models focuses on the dynamic creation of plotlines, quests, and story arcs rather than just dialogue. By leveraging their ability to understand and produce coherent long-form text, LLMs can generate entire narrative structures that adapt to player actions and in-game events. This enables a shift away from rigid, pre-scripted storylines toward more fluid, emergent storytelling experiences. Games can present players with procedurally generated plots that still maintain thematic consistency, pacing, and character development. LLM-driven narrative generation holds the potential to greatly enhance player agency and replayability, but it also introduces challenges in ensuring narrative coherence, balancing player freedom with plot structure, and integrating generated content with game mechanics and world-building.
+
+        \subsubsection{Procedural Generation}      
+
+            \par
+            Procedural generation in video games using large language models enables the creation of rich, varied game content such as quests, lore, item descriptions, and environmental storytelling elements in real time. Unlike traditional procedural systems that rely on handcrafted rules and templates, LLMs can generate content with greater linguistic diversity and contextual awareness, resulting in more immersive and believable worlds. For example, an LLM can create a unique backstory for a village, generate side quests that reference recent player actions, or describe ancient ruins with tone and style consistent with the game’s setting. This allows for high variability without sacrificing narrative depth. However, challenges include maintaining internal consistency, avoiding repetition or contradictions, and ensuring that generated content aligns with game design goals and player expectations.
+
+    \subsection{Types of Games}
+
+        \par
+        This section will evaluate the types of games that previous articles have written about. Some common themes among these papers are the focus on role-playing games and virtual/extended reality. 
+
+        \subsubsection{Role-Playing Games}
+
+            \par
+            One of the most frequently mentioned genres of video games in video game LLM papers are role-playing games (RPGs). There is some debate over the definition of role-playing game, like whether the player-character must be a blank slate, but this paper will use the following definition. Role-playing games are games in which the player chooses player attributes such as skills, stats, appearance, and personality. The player's attributes and choices will affect the gameplay and narrative of the game. This genre of video game would benefit massively from the successful integration of LLMs since much of the gameplay of RPGs is dialogue. CRPGs (Computer RPGs) originate from TTRPGs (Table-top RPGs) like Dungeons and Dragons in which the Dungeon Master acts as the NPCs. This allows for incredible emergent gameplay and dynamic NPC-player interaction, since the NPC dialogue is improvised and acted on by a person. CRPGs lack this dynamic and unpredictable NPC interaction. LLMs could potentially add an AI dungeon master to CRPGS and simulate the randomness and unpredictability of real conversation. CRPGs mostly use scripted dialogue which is less interactive than real conversation, since there are only a few dialogue options for the player to choose and a few responses that the NPC can give. Comparing this with an LLM operated NPC where the player can say anything and the NPC can give real-time responses. Clearly an LLM NPC would be much more interactive in a game and simulate real life conversation more accurately. This would make the game world more believable and give the player the feeling of having more control over their character and their conversations with NPCs.
+
+        \subsubsection{Extended Reality}
+
+            \par
+            Extended reality is an umbrella term which covers virtual reality, augmented reality, and mixed reality. It is a topic which comes up frequently in the academic research of LLMs in games and for good reason. The goal of implementing LLM-NPCs is to create a more immersive and lifelike world\cite{christiansen_exploring_2024}. This complements extended reality as it too seeks to increase player immersion in the game/media world. Many studies use text-to-speech and speech-to-text for their dialogue systems. This simulates reality better than typing dialogue into a textbox or choosing dialogue from dialogue options. Text-to-speech offers the ability for LLM dialogue to be spoken by an AI voice, so that the NPC can talk to the player. This paper suggests that using text-to-speech actually harms player immersion since AI-voices often fall into the uncanny valley and players can immediately identify an AI generated voice line. Additionally, many studies have identified the delay of LLM response generation to be a technical problem with LLM integration in games. This causes a problem in extended reality games since players are expecting NPCs to act more life-like. In non-extended reality games, say for example a game with text boxes for dialogue, the delay is not as much of a problem since the player will not be expecting lifelike speech behavior from NPCs. The problem of LLM response time can also be mitigated with rolling text, so that the response is given to the player as the LLM is generating it, much like Chat-GPT 4 does.
+
+    
+
+\section{Methods}
+
+    \par
+    In order to test whether an LLM system can generate quality, relevant, real-time dialogue in a video-game, a game demo was made. The game demo consists of a small world in which there are several NPCs. The player can talk to the NPCs and complete a quest for one of them. The LLM system was tested for its output for several features. A feature of the LLM system is a specific task that it can perform accurately. The set of features this project was tested on is: directions, NPC information, situation, items, quests, lore, dialogue history, and inventory. These features constitute the majority of the information that a dialogue system would use to generate responses in a CRPG. The high-level implementation of each of these features is explained. 
+
+    \subsection{NPC Information}
+    NPC information consists of name, age, short biography, personality description. NPC information is retrieved based on the NPC you are speaking to. This allows the LLM system to generate responses which draw on the NPC's personal information.
+
+    \subsection{Situation}
+    The situation refers to anything immediately surrounding the location of the conversation, which the NPC would be aware of. Situational information consists of time of day, weather, nearby characters, location, and nearby items. Of course, situational information can be expanded or reduced based on the information which the game designer deems relevant. For an NPC in Skyrim, the situation might include of the race of each character present and for an NPC is Stardew Valley, the situation might include the current season. 
+
+    \subsection{Directions}
+    The directions feature consists of all information that is required for the LLM system to generate accurate descriptions of locational information. The most basic information in this feature is the current location where the conversation is occuring. More complex information can be included depending on the desired functionality of the LLM system. If the game developer wants the LLM system to be able to give accurate directions to a location, then the LLM system needs some textual representation of a map of the game world. The complexity of this map and textual representation will vary between games. For example, a 2D platformer's map will be less complex than an open world RPG. 
+
+    \subsection{Items}
+    The items feature consists of all information about in-game items that is relevant to the conversation. In standard CRPGs and the demo, this reduces to item descriptions (so the LLM system knows some information about the items) and an item exchange log (so the LLM system knows when items have been exchanged between the player and the NPC). 
+
+    \subsection{Quests}
+    Most CRPGs use quests to further the story and provide the player with tasks to complete. Often, these quests are initiated by speaking to an NPC who assigns a quest to the player. The LLM system, therefore must be given a list of assignable quests which it can choose to assign to the player at will. The quest system in the demo also includes lists of active and completed quests. Each NPC has its own set of quests that it can assign. Not only do NPC often assign quests, but often times quest objectives (smaller tasks which are part of the larger quest) are completed by speaking to NPCs. Thus the LLM system must know a description of each quest objective so that it can determine what to say to the player regarding quest objectives and when to complete the quest objective. This is contained inside the information of a quest. The LLM is given the quest data and quest state so that has the proper context to advance quests. The method for quest assignment and objective advancement used in the demo is a tag system. All NPC dialogue is enclosed in quotation marks and tags are enclosed in square brakets. For example, when the LLM system assigns a quest it appends [quest\_assigned, quest\_id] to its output. Similarly for objective advancement it appends [next\_objective, quest\_id]. These tags are then extracted and used to alter the game state. 
+    
+    
+        
+\section{Evaluation Metrics}
+
+    \par
+    
+
+\section{Results and Discussion}
+
+    \par
+    
+
+\section{Ethical Considerations}
+
+    \par
+    
+
+\section{Replication Instructions}
+
+    \par
+    
+
+\printbibliography
+
+\end{document}
